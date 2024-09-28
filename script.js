@@ -1,4 +1,5 @@
 function operate(op, num1, num2) {
+    resetInputs();
     switch (op) {
         case '+':
             return num1 + num2;
@@ -14,7 +15,13 @@ function operate(op, num1, num2) {
 function handleOnClick(e) {
     const buttonValue = e.target.textContent || e.target.innerText;
     if (buttonValue === '=') {
-        calculate();
+        if (num1 && op && num2) {
+            num1 = operate(op, num1, num2);
+        } else {
+            setScreen('Error');
+            resetInputs();
+            return
+        }
     } else if (buttonValue === '⌫') {
          if (num2 !== '') {
             num2 = num2.substring(0, num2.length - 1);
@@ -34,11 +41,17 @@ function handleOnClick(e) {
     } else {
         num2 = num2 ? num2 + buttonValue : buttonValue;
     }
-    updateScreen();
+    setScreen(num1 + op + num2);
 }
 
-function updateScreen() {
-    screen.innerText = num1 + op + num2;
+function setScreen(text) {
+    screen.innerText = text;
+}
+
+function resetInputs() {
+    num1 = '';
+    num2 = '';
+    op = '';
 }
 
 let num1 = '';
