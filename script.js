@@ -11,3 +11,41 @@ function operate(op, num1, num2) {
     }
 }
 
+function handleOnClick(e) {
+    const buttonValue = e.target.textContent || e.target.innerText;
+    if (buttonValue === '=') {
+        calculate();
+    } else if (buttonValue === '⌫') {
+         if (num2 !== '') {
+            num2 = num2.substring(0, num2.length - 1);
+         } else if (op !== '') {
+            op = '';
+         } else {
+            num1 = num1.substring(0, num1.length - 1);
+         }
+    } else if (['+', '-', '*', '/'].includes(buttonValue)) {
+        if (num1 && op === '') {
+            op = buttonValue;
+        } else {
+            return
+        }
+    } else if (op === '') {
+        num1 = num1 ? num1 + buttonValue : buttonValue;
+    } else {
+        num2 = num2 ? num2 + buttonValue : buttonValue;
+    }
+    updateScreen();
+}
+
+function updateScreen() {
+    screen.innerText = num1 + op + num2;
+}
+
+let num1 = '';
+let num2 = '';
+let op = '';
+
+const screen = document.querySelector(".calculator-screen");
+
+const buttons = document.querySelectorAll("button");
+buttons.forEach((button) => button.addEventListener("click", handleOnClick))
